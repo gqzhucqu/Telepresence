@@ -1,0 +1,49 @@
+title: mod med;
+data: file is datafrontiers2.dat;
+vari: NAMES ARE g1 g2 g3 g4 m1 m2 zx zy zm zw zc1 zc2 zc3 zc4;
+usev= g1 g2 g3 g4 m1 m2 zx zy zm zw zc1 zc2 zc3 zc4 int;
+
+DEFINE:  int = zx * zw;
+standardize int;
+
+analysis: boot = 5000;
+
+model:
+zm on zx(beta1)
+zw(beta2)
+int(beta3)
+zc1
+zc2
+zc3
+zc4
+g1
+g2
+g3
+g4
+m1
+m2;
+
+zy on zx(beta4)
+zm(beta5)
+zw
+int
+zc1
+zc2
+zc3
+zc4
+g1
+g2
+g3
+g4
+m1
+m2;
+
+model constraint:
+new(med slp_hi slp_lo med_hi med_lo);
+med = beta1 * beta5;
+slp_hi = beta1 + beta3;
+slp_lo = beta1 - beta3;
+med_hi = slp_hi * beta5;
+med_lo = slp_lo * beta5;
+
+output: stand cint(bcboot);
